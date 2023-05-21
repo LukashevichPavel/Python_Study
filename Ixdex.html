@@ -1,89 +1,123 @@
+
 <!DOCTYPE html>
+<canvas id="rain"></canvas>
 <html>
-  <head>
-    <title>Калькулятор</title>
-    <meta charset="UTF-8">
-    <style>
-      label {
-        display: inline-block;
-        width: 100%;
-        margin-bottom: 5px;
-      }
-      input[type="text"] {
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-        box-sizing: border-box;
-      }
-      input[type="button"] {
-        width: 50%;
-        margin: 5px 5px 0 0;
-        padding: 10px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: none;
-        background-color: #4CAF50;
-        color: #fff;
-        cursor: pointer;
-      }
-      input[type="button"]:hover {
-        background-color: #3E8E41;
-      }
-      input[type="button"]:active {
-        background-color: #4CAF50;
-      }
-      #result {
-        margin-top: 10px;
-        padding: 10px;
-        font-size: 18px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-        box-sizing: border-box;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Калькулятор</h1>
-    <form>
-      <label>
-        <span>Число 1</span>
-        <input type="text" id="num1" />
-      </label>
-      <label>
-        <span>Число 2</span>
-        <input type="text" id="num2" />
-      </label>
-      <input type="button" value="Сложить" onclick="add()" />
-      <input type="button" value="Вычесть" onclick="subtract()" />
-      <input type="button" value="Умножить" onclick="multiply()" />
-      <input type="button" value="Разделить" onclick="divide()" />
-    </form>
-    <div id="result"></div>
-    <script>
-      function add() {
-        var num1 = parseFloat(document.getElementById("num1").value);
-        var num2 = parseFloat(document.getElementById("num2").value);
-        document.getElementById("result").innerHTML = num1 + num2;
-      }
-      function subtract() {
-        var num1 = parseFloat(document.getElementById("num1").value);
-        var num2 = parseFloat(document.getElementById("num2").value);
-        document.getElementById("result").innerHTML = num1 - num2;
-      }
-      function multiply() {
-        var num1 = parseFloat(document.getElementById("num1").value);
-        var num2 = parseFloat(document.getElementById("num2").value);
-        document.getElementById("result").innerHTML = num1 * num2;
-      }
-      function divide() {
-        var num1 = parseFloat(document.getElementById("num1").value);
-        var num2 = parseFloat(document.getElementById("num2").value);
-        document.getElementById("result").innerHTML = num1 / num2;
-      }
-    </script>
-  </body>
+<head>
+
+<title>Калькулятор</title>
+<link rel="stylesheet" href="./css/style.css">
+<link rel="icon" href="img/favicon.png">
+<meta charset="UTF-8">
+<style>
+  label {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 5px;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+  }
+  input[type="button"] {
+    width: 20%;
+    margin: 5px 5px 0 0;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #4CAF50;
+    color: #fff;
+    cursor: pointer;
+  }
+  input[type="button"]:hover {
+    background-color: #3E8E41;
+  }
+  input[type="button"]:active {
+    background-color: #4CAF50;
+  }
+  #result {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+  }
+</style>
+</head>
+<body>
+  
+
+<h1>Калькулятор</h1>
+<form>
+  <label>
+    <span>x</span>
+    <input type="text" id="num1" />
+  </label>
+  <label>
+    <span>y</span>
+    <input type="text" id="num2" />
+  </label>
+  <input type="button" value="+" onclick="add()" />
+  <input type="button" value="-" onclick="subtract()" />
+  <input type="button" value="*" onclick="multiply()" />
+  <input type="button" value="/" onclick="divide()" />
+</form>
+<div id="result"></div>
+<script>
+<!--    import gsap from 'https://cdn.skypack.dev/gsap@3.11.0'
+-->
+console.clear()
+
+const CANVAS = document.querySelector('#rain')
+
+const DEFAULT_OPTIONS = {
+size: () => window.innerWidth * 0.015,
+family: 'JetBrains Mono, monospace',
+fps: 24,
+hue: 120,
+limiter: 0.25,
+glyphs:
+'ラドクリフマラソンわたしワタシんょンョたばこタバコとうきょうトウキョウ0123456789±!@#$%^&*()_+ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+// glyphs: '01'
+
+}
+
+const DigitalRain = function (el, options) {
+if (el.tagName !== 'CANVAS') return console.error('Need a canvas element')
+const self = this
+self.__ratio = window.devicePixelRatio || 1
+self.canvas = el
+self.options = options
+}
+
+  function add() {
+    var num1 = parseFloat(document.getElementById("num1").value);
+    var num2 = parseFloat(document.getElementById("num2").value);
+    document.getElementById("result").innerHTML = num1 + num2;
+  }
+  function subtract() {
+    var num1 = parseFloat(document.getElementById("num1").value);
+    var num2 = parseFloat(document.getElementById("num2").value);
+    document.getElementById("result").innerHTML = num1 - num2;
+  }
+  function multiply() {
+    var num1 = parseFloat(document.getElementById("num1").value);
+    var num2 = parseFloat(document.getElementById("num2").value);
+    document.getElementById("result").innerHTML = num1 * num2;
+  }
+  function divide() {
+    var num1 = parseFloat(document.getElementById("num1").value);
+    var num2 = parseFloat(document.getElementById("num2").value);
+    document.getElementById("result").innerHTML = num1 / num2;
+  }
+</script>
+</body>
 </html>
+
